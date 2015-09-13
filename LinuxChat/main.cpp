@@ -1,5 +1,6 @@
-#include "utils.h"
+#include "SocketServer.h"
 
+#define SERVER_PORT 12345
 int main()
 {
     //check if the password file exists, if not create one
@@ -8,5 +9,9 @@ int main()
         cout<<"password file does not exist. Creating default file"<<endl;
         CreatePasswordFile();
     }
+
+    SocketServer server(SERVER_PORT);
+    server.Start();
+    server.Stop();
     return 0;
 }
