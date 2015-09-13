@@ -1,21 +1,25 @@
 # depslib dependency file v1.0
-1442135377 source:/home/swathi/Projects/LinuxSocket/LSeoacrknets/LinuxChat/main.cpp
-	"utils.h"
+1442135682 source:/home/swathi/Projects/LinuxSocket/LSeoacrknets/LinuxChat/main.cpp
 	"SocketServer.h"
 
-1442135600 /home/swathi/Projects/LinuxSocket/LSeoacrknets/LinuxChat/utils.h
+1442137710 /home/swathi/Projects/LinuxSocket/LSeoacrknets/LinuxChat/utils.h
 	<iostream>
 	<stdio.h>
 	<stdlib.h>
 	<string>
 	<fstream>
 	<map>
+	<pthread.h>
+	<string.h>
 
-1442135114 source:/home/swathi/Projects/LinuxSocket/LSeoacrknets/LinuxChat/SocketServer.cpp
+1442137669 source:/home/swathi/Projects/LinuxSocket/LSeoacrknets/LinuxChat/SocketServer.cpp
 	"SocketServer.h"
 
-1442135130 /home/swathi/Projects/LinuxSocket/LSeoacrknets/LinuxChat/SocketServer.h
+1442137089 /home/swathi/Projects/LinuxSocket/LSeoacrknets/LinuxChat/SocketServer.h
 	"utils.h"
+	<sys/socket.h>
+	<netinet/in.h>
+	<arpa/inet.h>
 
 1442135588 source:/home/swathi/Projects/LinuxSocket/LSeoacrknets/LinuxChat/Helpers.cpp
 	"utils.h"

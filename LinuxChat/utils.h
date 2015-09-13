@@ -1,11 +1,16 @@
 #ifndef UTILS_H
 #define UTILS_H
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
 #include <fstream>
 #include <map>
+
+#include <pthread.h> //for threads
+
+#include <string.h> //for memset and other string operations
 using namespace std;
 
 #define PWD_FILE "/passwds.pwd"

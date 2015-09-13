@@ -12,6 +12,8 @@ int main()
 
     SocketServer server(SERVER_PORT);
     server.Start();
+    cout<<"press enter to stop server"<<endl;
+    getchar();
     server.Stop();
     return 0;
 }
