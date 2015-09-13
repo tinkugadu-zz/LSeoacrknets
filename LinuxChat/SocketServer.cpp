@@ -1,5 +1,16 @@
 #include "SocketServer.h"
 
+#define MAX_LEN 1024
+enum ClientState
+{
+    STOP_CLIENT,
+    CONNECTED,
+    AUTHENTICATED,
+    COMMAND_MODE,
+    COMMUNICATION,
+    DISCONNECTED
+};
+
 //start the socket server. returns true if successfully started
 bool SocketServer::Start()
 {
@@ -86,13 +97,46 @@ void *SocketServer::listeningThread( void *ptr )
 
 void *SocketServer::clientThread( void *ptr )
 {
+    ClientState cur_state = STOP_CLIENT;
     ClientThreadParam *clientParam = (ClientThreadParam *)ptr;
-    while(clientParam->server->IsRunning())
+    char buffer[MAX_LEN];
+    char clientAddr[INET_ADDRSTRLEN];
+    int clientPort;
+    std::string clientName;
+    //get Ipaddress and port of client connected
+    getIpAddressPort(&(clientParam->Addr), clientAddr, &clientPort);
+    cout<<"accepted connection from "<<clientAddr<<" at port : "<<clientPort<<endl;
+    cur_state = CONNECTED;
+//start while loop to process client communication
+    while(clientParam->server->IsRunning() && cur_state != STOP_CLIENT)
     {
-        cout<<"client connected"<<endl;
-        sleep(2);
+        int len = read(clientParam->sockFd, buffer, MAX_LEN-1);
+        buffer[len] = '\0';
+        switch(cur_state)
+        {
+            case CONNECTED:
+            {
+                AuthResponse resp = AuthenticateClient(buffer, clientName);
+                if(resp == SUCCESS)
+                {
+                    cur_state = COMMUNICATION;
+                }
+                else
+                {
+                    cout<<"Authentication failure: "<<resp<<"  Disconnecting client"<<endl;
+                    cur_state = STOP_CLIENT;
+                }
+            }
+            break;
+            case COMMUNICATION:
+            cout<<clientName<<" : "<<buffer<<endl;
+            break;
+        }
     }
+    //close socket client if server is stopped
+    close(clientParam->sockFd);
     //deallocate heap memory to prevent memory leak.
     delete(clientParam);
     cout<<"client disconnected"<<endl;
 }
+

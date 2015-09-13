@@ -7,6 +7,9 @@
 #include <string>
 #include <fstream>
 #include <map>
+//for network related operation
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 #include <pthread.h> //for threads
 
@@ -34,4 +37,9 @@ bool IsPasswordFileExist();
 void UpdatePasswordFile(std::map<std::string, std::string> userMap);
 
 AuthResponse ChangePassword(std::string userName, std::string passwd);
+
+void getIpAddressPort(struct sockaddr* addr, char* ipAddr, int *portNum);
+
+AuthResponse AuthenticateClient(char *buffer, std::string &clientName);
+
 #endif //UTILS_H
