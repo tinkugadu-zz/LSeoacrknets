@@ -54,9 +54,45 @@ void SocketServer::Stop()
 void *SocketServer::listeningThread( void *ptr )
 {
     SocketServer *server = (SocketServer *)ptr;
+
+    ClientThreadParam *clientParam = new ClientThreadParam();
+    socklen_t sockLen = sizeof(clientParam->Addr);
+
     while(server->IsRunning())
     {
-        cout<<"server is accepting connections"<<endl;
+        if(server->NumConn < 1)
+        {
+            clientParam->sockFd = accept(server->GetListenSocket(),
+                            (struct sockaddr*)&(clientParam->Addr), &sockLen);
+            if(clientParam->sockFd == -1)
+            {
+                perror("error accepting connection from client");
+            }
+            else
+            {
+                ++server->NumConn;
+                //create thread for every client connected.
+                pthread_t clientThr;
+                if(pthread_create(&clientThr, NULL, clientThread, clientParam) != 0)
+                {
+                    perror("error creating thread for client. disconnecting client");
+                    close(clientParam->sockFd);
+                    delete(clientParam);
+                }
+            }
+        }
+    }
+}
+
+void *SocketServer::clientThread( void *ptr )
+{
+    ClientThreadParam *clientParam = (ClientThreadParam *)ptr;
+    while(clientParam->server->IsRunning())
+    {
+        cout<<"client connected"<<endl;
         sleep(2);
     }
+    //deallocate heap memory to prevent memory leak.
+    delete(clientParam);
+    cout<<"client disconnected"<<endl;
 }
