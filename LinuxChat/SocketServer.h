@@ -4,6 +4,8 @@
 #include "utils.h"
 #include <sys/socket.h>
 
+#define MAX_LEN 1024
+
 class SocketServer;
 
 struct ClientThreadParam

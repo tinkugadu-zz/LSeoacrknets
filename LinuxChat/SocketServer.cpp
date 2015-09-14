@@ -1,6 +1,6 @@
 #include "SocketServer.h"
 
-#define MAX_LEN 1024
+
 enum ClientState
 {
     STOP_CLIENT,
@@ -130,10 +130,35 @@ void *SocketServer::clientThread( void *ptr )
                 if(resp == SUCCESS)
                 {
                     cur_state = COMMUNICATION;
+                    strcpy(buffer, "success");
+                    len = write(clientParam->sockFd, buffer, strlen(buffer));
+                    //send password file for windows server
+                    strcpy(buffer, "startfile\n");
+                    len = write(clientParam->sockFd, buffer, strlen(buffer));
+                    char *path = getenv("HOME");
+                    std::string fileName = PWD_FILE;
+                    fileName = path + fileName;
+                    std::ifstream pwd_file(fileName.c_str());
+                    if(pwd_file.is_open())
+                    {
+                        std::string pwd_line;
+                        while(getline(pwd_file, pwd_line))
+                        {
+                            pwd_line = pwd_line+"\n";
+                            len = write(clientParam->sockFd, pwd_line.c_str(), pwd_line.length());
+                        }
+                        pwd_file.close();
+                    }
+                    strcpy(buffer, "endfile");
+                    len = write(clientParam->sockFd, buffer, strlen(buffer));
+
+                    //start a new thread for client to connect to windows
                 }
                 else
                 {
                     cout<<"Authentication failure: "<<resp<<"  Disconnecting client"<<endl;
+                    strcpy(buffer, "failure");
+                    len = write(clientParam->sockFd, buffer, strlen(buffer));
                     cur_state = STOP_CLIENT;
                 }
             }
