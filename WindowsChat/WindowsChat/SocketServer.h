@@ -16,7 +16,7 @@ struct ClientThreadParam
 //this is a TCP socket server that listens on configured port
 class SocketServer
 {
-    int _port;
+    std::string _port;
     bool _serverStarted;
     SOCKET _listenSocket;
     /*static void *listeningThread( void *ptr );
@@ -24,7 +24,7 @@ class SocketServer
 
 public:
     int NumConn;
-    SocketServer(int port): _port(port),
+    SocketServer(std::string port): _port(port),
 		_serverStarted(false), NumConn(0), _listenSocket(INVALID_SOCKET)
     {
         cout<<"initializing socket server"<<endl;

@@ -9,21 +9,20 @@ bool SocketServer::Start()
     hints.ai_protocol = IPPROTO_TCP;
     hints.ai_flags = AI_PASSIVE;
 
-	// Resolve the server address and port
-    int iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
-    if ( iResult != 0 ) {
-        printf("getaddrinfo failed with error: %d\n", iResult);
-        WSACleanup();
-        return 1;
-    }
-	 // Create a SOCKET for connecting to server
 	struct addrinfo *result = NULL;
+	// Resolve the server address and port
+	int iResult = getaddrinfo(NULL, _port.c_str(), &hints, &result);
+    if ( iResult != 0 ) {
+        printf("getaddrinfo failed with error: %d\n", iResult);        
+		return false;
+    }
+	//creat a socket to listen for connections
+	
 	_listenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
-    if (ListenSocket == INVALID_SOCKET) {
+	if (_listenSocket == INVALID_SOCKET) {
         printf("socket failed with error: %ld\n", WSAGetLastError());
         freeaddrinfo(result);
-        WSACleanup();
-        return 1;
+		return false;
     }
 
 	_serverStarted = true;
@@ -36,6 +35,8 @@ void SocketServer::Stop()
 	if(_serverStarted)
 	{
 		_serverStarted = false;
+
+		//close existing listening socket
 		closesocket(_listenSocket);
 		_listenSocket = INVALID_SOCKET;
 	}

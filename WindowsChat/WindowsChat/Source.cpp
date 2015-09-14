@@ -116,7 +116,7 @@ int main(int argc, char **argv)
 	}
 
 	//start a socket here
-	SocketServer Server(12345);
+	SocketServer Server("12345");
 	Server.Start();
 	cout<<"press enter to stop server"<<endl;
 	getchar();
