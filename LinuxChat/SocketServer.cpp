@@ -108,6 +108,7 @@ void *SocketServer::clientThread( void *ptr )
     getIpAddressPort(&(clientParam->Addr), clientAddr, &clientPort);
     cout<<"accepted connection from "<<clientAddr<<" at port : "<<clientPort<<endl;
     cur_state = CONNECTED;
+    char cur_cmd[MAX_LEN];
 
 //start while loop to process client communication
     while(clientParam->server->IsRunning() && cur_state != STOP_CLIENT)
@@ -132,14 +133,42 @@ void *SocketServer::clientThread( void *ptr )
             }
             break;
             case COMMUNICATION:
-            cout<<clientName<<" : "<<buffer<<endl;
+            {
+                if(buffer[0] == '"' && buffer[len-1] == '"')
+                {
+                    //client is sending command. execute it
+                    strncpy(cur_cmd, buffer+1, len-2);
+                    cur_state = COMMAND_MODE;
+                    //reply client the same message as response
+                    len = write(clientParam->sockFd, buffer, len);
+                }
+                else
+                {
+                    cout<<clientName<<" : "<<buffer<<endl;
+                }
+            }
             break;
-        }
-    }
+            case COMMAND_MODE:
+            {
+                //currently supports change password of user
+                if(strcmp(cur_cmd, "changepassword") == 0)
+                {
+                    AuthResponse resp = ChangePassword(clientName, buffer);
+                    if(resp != SUCCESS)
+                    {
+                        cout<<"error changing password for "<<clientName<<" : "<<resp<<endl;
+                    }
+                }
+            }
+            break;
+        }//switch
+    }//while
     //close socket client if server is stopped
     close(clientParam->sockFd);
     //deallocate heap memory to prevent memory leak.
     delete(clientParam);
     cout<<"client disconnected"<<endl;
+    //open server back to accepting connections.
+    --clientParam->server->NumConn;
 }
 
