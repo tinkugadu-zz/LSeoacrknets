@@ -75,6 +75,7 @@ void *SocketServer::listeningThread( void *ptr )
         {
             clientParam->sockFd = accept(server->GetListenSocket(),
                             (struct sockaddr*)&(clientParam->Addr), &sockLen);
+            clientParam->server = server;
             if(clientParam->sockFd == -1)
             {
                 perror("error accepting connection from client");
@@ -107,11 +108,13 @@ void *SocketServer::clientThread( void *ptr )
     getIpAddressPort(&(clientParam->Addr), clientAddr, &clientPort);
     cout<<"accepted connection from "<<clientAddr<<" at port : "<<clientPort<<endl;
     cur_state = CONNECTED;
+
 //start while loop to process client communication
     while(clientParam->server->IsRunning() && cur_state != STOP_CLIENT)
     {
         int len = read(clientParam->sockFd, buffer, MAX_LEN-1);
         buffer[len] = '\0';
+        //cout<<"debug:: received from client----"<<buffer<<endl;
         switch(cur_state)
         {
             case CONNECTED:

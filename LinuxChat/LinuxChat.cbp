@@ -32,7 +32,11 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="Helpers.cpp" />
+		<Unit filename="SocketServer.cpp" />
+		<Unit filename="SocketServer.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="utils.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />
