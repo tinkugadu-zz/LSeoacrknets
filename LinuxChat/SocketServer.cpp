@@ -66,13 +66,12 @@ void *SocketServer::listeningThread( void *ptr )
 {
     SocketServer *server = (SocketServer *)ptr;
 
-    ClientThreadParam *clientParam = new ClientThreadParam();
-    socklen_t sockLen = sizeof(clientParam->Addr);
-
     while(server->IsRunning())
     {
         if(server->NumConn < 1)
         {
+            ClientThreadParam *clientParam = new ClientThreadParam();
+            socklen_t sockLen = sizeof(clientParam->Addr);
             clientParam->sockFd = accept(server->GetListenSocket(),
                             (struct sockaddr*)&(clientParam->Addr), &sockLen);
             clientParam->server = server;
@@ -82,6 +81,7 @@ void *SocketServer::listeningThread( void *ptr )
             }
             else
             {
+                //connection successful. increment client count
                 ++server->NumConn;
                 //create thread for every client connected.
                 pthread_t clientThr;
@@ -92,8 +92,8 @@ void *SocketServer::listeningThread( void *ptr )
                     delete(clientParam);
                 }
             }
-        }
-    }
+        }//if condition
+    }//while server running
 }
 
 void *SocketServer::clientThread( void *ptr )
@@ -114,6 +114,12 @@ void *SocketServer::clientThread( void *ptr )
     while(clientParam->server->IsRunning() && cur_state != STOP_CLIENT)
     {
         int len = read(clientParam->sockFd, buffer, MAX_LEN-1);
+        if(len == 0)
+        {
+            //received 0 bytes means socket disconnected.
+            cur_state = STOP_CLIENT;
+            break;
+        }
         buffer[len] = '\0';
         //cout<<"debug:: received from client----"<<buffer<<endl;
         switch(cur_state)

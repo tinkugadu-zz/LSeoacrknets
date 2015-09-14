@@ -5,7 +5,7 @@
 		<Cursor position="2833" topLine="97" />
 	</File>
 	<File name="SocketServer.cpp" open="1" top="1" tabpos="4">
-		<Cursor position="1346" topLine="31" />
+		<Cursor position="1106" topLine="31" />
 	</File>
 	<File name="SocketServer.h" open="1" top="0" tabpos="3">
 		<Cursor position="89" topLine="0" />
@@ -14,6 +14,6 @@
 		<Cursor position="428" topLine="0" />
 	</File>
 	<File name="utils.h" open="1" top="0" tabpos="1">
-		<Cursor position="961" topLine="21" />
+		<Cursor position="961" topLine="20" />
 	</File>
 </CodeBlocks_layout_file>
