@@ -7,11 +7,10 @@ class SocketServer;
 
 struct ClientThreadParam
 {
-    int sockFd;
+	SOCKET sockFd;
     struct sockaddr Addr;
-    SocketServer* server;
+    SocketServer* server;	
 };
-
 
 //this is a TCP socket server that listens on configured port
 class SocketServer
@@ -19,8 +18,9 @@ class SocketServer
     std::string _port;
     bool _serverStarted;
     SOCKET _listenSocket;
-    /*static void *listeningThread( void *ptr );
-    static void *clientThread( void *ptr );*/
+	//threads to process  connected clients
+	static DWORD WINAPI listeningThread( LPVOID lpParam );
+	static DWORD WINAPI clientThread( LPVOID lpParam );
 
 public:
     int NumConn;

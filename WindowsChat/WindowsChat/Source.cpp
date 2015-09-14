@@ -1,6 +1,6 @@
 #include "utils.h"
 #include "SocketServer.h"
-#define MAX_LEN 1024
+
 
 void SocketCleanUp();
 int main(int argc, char **argv)
@@ -97,7 +97,7 @@ int main(int argc, char **argv)
 		//received password file.
 		char *tmpLine = strtok(buffer, "\n");
 		std::ofstream pwd_file;
-		pwd_file.open("passwds.pwd");
+		pwd_file.open(PWD_FILE);
 		tmpLine = strtok(NULL, "\n");
 		while(strcmp(tmpLine, "endfile") != 0)
 		{
@@ -117,7 +117,12 @@ int main(int argc, char **argv)
 
 	//start a socket here
 	SocketServer Server("12345");
-	Server.Start();
+	if(!Server.Start())
+	{
+		//failed to start server. closing server.
+		SocketCleanUp();
+		exit(1);
+	}
 	cout<<"press enter to stop server"<<endl;
 	getchar();
 	Server.Stop();
@@ -132,4 +137,60 @@ void SocketCleanUp()
 {
 	//de initialize winsock
 	WSACleanup();
+}
+
+bool GetUsersFromFile(std::map<std::string, std::string> &userMap)
+{
+    char *path = getenv("HOME");
+    std::string fileName = PWD_FILE;
+    fileName = path + fileName;
+    std::fstream pwd_file(fileName.c_str());
+    if(!pwd_file.is_open())
+    {
+        perror("Error opening password file");
+        return false;
+    }
+    std::string line;
+    while(getline(pwd_file, line))
+    {
+        int ind = line.find('\t');
+        if(ind == 0 || ind == EOF)
+        {
+            continue;
+        }
+        userMap.insert(std::pair<std::string, std::string>(line.substr(0, ind),
+                                    line.substr(ind+1, line.length()-1-ind)));
+    }
+    pwd_file.close();
+    if(userMap.size() == 0)
+    {
+        return false;
+    }
+    return true;
+}
+
+AuthResponse AuthenticateClient(char *buffer, std::string &clientName)
+{
+    //authenticate user and send response
+    std::map<std::string, std::string> userMap;
+    if(!GetUsersFromFile(userMap))
+    {
+		return AUTH_ERROR;
+    }
+    char *user = strtok(buffer, "\t");
+    clientName = user;
+    char *passwd = strtok(NULL, "\t");
+    std::string Passwd(passwd);
+    std::map<std::string, std::string>::iterator it = userMap.find(clientName);
+    //check if username exists
+    if(it == userMap.end())
+    {
+        return UNKNOWN_USER;
+    }
+    //if passwords dont match, wrong password
+    if(it->second != Passwd)
+    {
+        return WRONG_PASSWORD;
+    }
+    return SUCCESS;
 }
