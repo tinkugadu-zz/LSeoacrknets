@@ -42,4 +42,5 @@ AuthResponse AuthenticateClient(char *buffer, std::string &clientName);
 
 //implemented in source.cpp
 DWORD WINAPI ChatThread( LPVOID lpParam );
+void getIpAddressPort(struct sockaddr* addr, char* ipAddr, int *portNum);
 #endif //UTILS_H

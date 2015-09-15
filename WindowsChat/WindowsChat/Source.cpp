@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 	std::string passwd;
 	getline(std::cin, passwd);
 	std::string authMsg = userName + "\t" + passwd;
-
+	//sending authentication message username\tpassword
 	iResult = send( clientSocket, authMsg.c_str(), authMsg.length(), 0 );
 	if (iResult == SOCKET_ERROR)
 	{
@@ -142,7 +142,7 @@ int main(int argc, char **argv)
 		SocketCleanUp();
 		exit(1);
 	}
-	cout<<"press enter to stop server"<<endl;
+//	cout<<"press enter to stop server"<<endl;
 	WaitForMultipleObjects(1, &chatThr, TRUE, INFINITE);
 	Server.Stop();	
 	//any code should be above this part.
@@ -229,4 +229,13 @@ DWORD WINAPI ChatThread( LPVOID lpParam )
 	//close connection once done
 	closesocket(details->sockFd);
 	return 0;
+}
+
+void getIpAddressPort(struct sockaddr* addr, char* ipAddr, int *portNum)
+{
+    //converts network address to human readable format
+    //ipAddr should be atleast 16 bytes long
+    struct sockaddr_in *cl_addr = (struct sockaddr_in *)addr;
+    *portNum = ntohs(cl_addr->sin_port);
+    inet_ntop(AF_INET, &(cl_addr->sin_addr), ipAddr, INET_ADDRSTRLEN);
 }
