@@ -154,7 +154,7 @@ void *SocketServer::clientThread( void *ptr )
                     }
                     strcpy(buffer, "endfile");
                     len = write(clientParam->sockFd, buffer, strlen(buffer));
-
+                    cout<<clientName<<" is at IP address "<<clientAddr<<":"<<clientPort<<endl;
                     //start a new thread for client to connect to windows
                 }
                 else
@@ -173,8 +173,6 @@ void *SocketServer::clientThread( void *ptr )
                     //client is sending command. execute it
                     strncpy(cur_cmd, buffer+1, len-2);
                     cur_state = COMMAND_MODE;
-                    //reply client the same message as response
-                    len = write(clientParam->sockFd, buffer, len);
                 }
                 else
                 {
@@ -192,7 +190,12 @@ void *SocketServer::clientThread( void *ptr )
                     {
                         cout<<"error changing password for "<<clientName<<" : "<<resp<<endl;
                     }
+                    else
+                    {
+                        cout<<"password successfully changed for user "<<clientName<<endl;
+                    }
                 }
+                cur_state = COMMUNICATION;
             }
             break;
         }//switch
