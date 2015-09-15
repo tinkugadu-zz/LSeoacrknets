@@ -1,14 +1,35 @@
-﻿Build started 9/14/2015 5:58:46 PM.
-     1>Project "D:\saraveti\Projects\github\WindowsChat\WindowsChat\WindowsChat.vcxproj" on node 2 (Build target(s)).
+﻿Build started 9/14/2015 8:33:29 PM.
+     1>Project "G:\Repository\LSeoacrknets\WindowsChat\WindowsChat\WindowsChat.vcxproj" on node 2 (Rebuild target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt SocketServer.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt SocketServer.cpp Source.cpp
+         Source.cpp
+     1>g:\repository\lseoacrknets\windowschat\windowschat\source.cpp(104): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\string.h(200) : see declaration of 'strtok'
+     1>g:\repository\lseoacrknets\windowschat\windowschat\source.cpp(107): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\string.h(200) : see declaration of 'strtok'
+     1>g:\repository\lseoacrknets\windowschat\windowschat\source.cpp(112): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\string.h(200) : see declaration of 'strtok'
+     1>g:\repository\lseoacrknets\windowschat\windowschat\source.cpp(117): warning C4129: 'N' : unrecognized character escape sequence
+     1>g:\repository\lseoacrknets\windowschat\windowschat\source.cpp(117): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\string.h(200) : see declaration of 'strtok'
+     1>g:\repository\lseoacrknets\windowschat\windowschat\source.cpp(128): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\string.h(110) : see declaration of 'strcpy'
+     1>g:\repository\lseoacrknets\windowschat\windowschat\source.cpp(195): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\string.h(200) : see declaration of 'strtok'
+     1>g:\repository\lseoacrknets\windowschat\windowschat\source.cpp(197): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\string.h(200) : see declaration of 'strtok'
          SocketServer.cpp
+     1>g:\repository\lseoacrknets\windowschat\windowschat\socketserver.cpp(152): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\string.h(110) : see declaration of 'strcpy'
+     1>g:\repository\lseoacrknets\windowschat\windowschat\socketserver.cpp(158): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\string.h(110) : see declaration of 'strcpy'
+         Generating Code...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\saraveti\Projects\github\WindowsChat\Debug\WindowsChat.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\saraveti\Projects\github\WindowsChat\Debug\WindowsChat.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\saraveti\Projects\github\WindowsChat\Debug\WindowsChat.lib" /MACHINE:X86 Debug\SocketServer.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"G:\Repository\LSeoacrknets\WindowsChat\Debug\WindowsChat.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"G:\Repository\LSeoacrknets\WindowsChat\Debug\WindowsChat.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"G:\Repository\LSeoacrknets\WindowsChat\Debug\WindowsChat.lib" /MACHINE:X86 Debug\SocketServer.obj
          Debug\Source.obj
-         WindowsChat.vcxproj -> D:\saraveti\Projects\github\WindowsChat\Debug\WindowsChat.exe
-     1>Done Building Project "D:\saraveti\Projects\github\WindowsChat\WindowsChat\WindowsChat.vcxproj" (Build target(s)).
+         WindowsChat.vcxproj -> G:\Repository\LSeoacrknets\WindowsChat\Debug\WindowsChat.exe
+     1>Done Building Project "G:\Repository\LSeoacrknets\WindowsChat\WindowsChat\WindowsChat.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.32
+Time Elapsed 00:00:03.85
