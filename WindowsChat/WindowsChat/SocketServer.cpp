@@ -55,8 +55,8 @@ bool SocketServer::Start()
 	cout<<"starting socket server..."<<endl;
 	//start a thread to accept new connections
 	DWORD dwordListenThr;
-	HANDLE listenThr = CreateThread(NULL, 0, listeningThread, this, 0, &dwordListenThr);
-	if(listenThr == NULL)
+	ListenThread = CreateThread(NULL, 0, listeningThread, this, 0, &dwordListenThr);
+	if(ListenThread == NULL)
 	{
 		//handle thread creation failure
 		cout<<"Error starting listening thread"<<endl;
@@ -132,7 +132,7 @@ DWORD WINAPI SocketServer::clientThread( LPVOID lpParam )
 	while(clientParam->server->IsRunning() && cur_state != STOP_CLIENT)
 	{
 		int bufLen = recv(clientParam->sockFd, buffer, MAX_LEN, 0);
-		if(bufLen == 0)
+		if(bufLen <= 0)
 		{
 			cout<<"no data received from client. Disconnecting !"<<endl;
 			cur_state = STOP_CLIENT;
@@ -149,12 +149,15 @@ DWORD WINAPI SocketServer::clientThread( LPVOID lpParam )
 				{
 					cur_state = COMMUNICATION;
 					cout<<"Authentication Successful for "<<clientName<<endl;
+					strcpy(buffer, "success");					
 				}
 				else
 				{
 					cout<<"Authentication failed. Disconnecting client"<<endl;
 					cur_state = STOP_CLIENT;
+					strcpy(buffer, "authFailure");
 				}
+				bufLen = send(clientParam->sockFd, buffer, strlen(buffer), 0); 
 			}
 			break;
 			case COMMUNICATION:

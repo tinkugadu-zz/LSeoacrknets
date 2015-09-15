@@ -1,8 +1,14 @@
 #include "utils.h"
 #include "SocketServer.h"
 
-
 void SocketCleanUp();
+
+struct ClientDetails
+{
+	SOCKET sockFd;
+	char Name[128];
+};
+
 int main(int argc, char **argv)
 {
 	if(argc != 3)
@@ -115,6 +121,19 @@ int main(int argc, char **argv)
 		cout<<"received password file"<<endl;
 	}
 
+	//start client Input thread for chatting
+	DWORD dwordChatThr;	
+	ClientDetails *details = new ClientDetails();
+	details->sockFd = clientSocket;
+	strcpy(details->Name, userName.c_str());
+	HANDLE chatThr = CreateThread(NULL, 0, ChatThread, details, 0, &dwordChatThr);
+	if(chatThr == NULL)
+	{
+		perror("error creating chatting thread for client");
+		SocketCleanUp();
+		exit(1);
+	}
+	
 	//start a socket here
 	SocketServer Server("12345");
 	if(!Server.Start())
@@ -124,10 +143,8 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 	cout<<"press enter to stop server"<<endl;
-	getchar();
-	Server.Stop();
-	//close connection once done
-	closesocket(clientSocket);
+	WaitForMultipleObjects(1, &chatThr, TRUE, INFINITE);
+	Server.Stop();	
 	//any code should be above this part.
 	SocketCleanUp();
 	return 0;
@@ -140,10 +157,8 @@ void SocketCleanUp()
 }
 
 bool GetUsersFromFile(std::map<std::string, std::string> &userMap)
-{
-    char *path = getenv("HOME");
-    std::string fileName = PWD_FILE;
-    fileName = path + fileName;
+{   
+    std::string fileName = PWD_FILE;    
     std::fstream pwd_file(fileName.c_str());
     if(!pwd_file.is_open())
     {
@@ -193,4 +208,25 @@ AuthResponse AuthenticateClient(char *buffer, std::string &clientName)
         return WRONG_PASSWORD;
     }
     return SUCCESS;
+}
+
+DWORD WINAPI ChatThread( LPVOID lpParam )
+{
+	std::string line;
+	ClientDetails *details = (ClientDetails *)lpParam;
+	
+	while(true)
+	{
+		cout<<details->Name<<" : ";
+		getline(std::cin, line);
+		if(line.length() == 0)
+		{
+			break;
+		}
+		//send to server
+		int len = send( details->sockFd, line.c_str(), line.length(), 0 );
+	}
+	//close connection once done
+	closesocket(details->sockFd);
+	return 0;
 }

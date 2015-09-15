@@ -39,4 +39,7 @@ enum AuthResponse
 
 bool GetUsersFromFile(std::map<std::string, std::string> &userMap);
 AuthResponse AuthenticateClient(char *buffer, std::string &clientName);
+
+//implemented in source.cpp
+DWORD WINAPI ChatThread( LPVOID lpParam );
 #endif //UTILS_H

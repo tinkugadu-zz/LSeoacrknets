@@ -17,12 +17,13 @@ class SocketServer
 {
     std::string _port;
     bool _serverStarted;
-    SOCKET _listenSocket;
+    SOCKET _listenSocket;	
 	//threads to process  connected clients
 	static DWORD WINAPI listeningThread( LPVOID lpParam );
 	static DWORD WINAPI clientThread( LPVOID lpParam );
 
 public:
+	HANDLE ListenThread;
     int NumConn;
     SocketServer(std::string port): _port(port),
 		_serverStarted(false), NumConn(0), _listenSocket(INVALID_SOCKET)
