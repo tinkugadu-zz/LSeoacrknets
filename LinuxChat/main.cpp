@@ -3,6 +3,11 @@
 #define SERVER_PORT 12345
 int main(int argc, char **argv)
 {
+    if(argc != 3)
+    {
+        cout<<"usage "<<argv[0]<<" <ipaddress> port"<<endl;
+        exit(1);
+    }
     //check if the password file exists, if not create one
     if(!IsPasswordFileExist())
     {
@@ -12,7 +17,7 @@ int main(int argc, char **argv)
 
     SocketServer server(SERVER_PORT);
     server.Start();
-    cout<<"press enter to stop server"<<endl;
+//    cout<<"press enter to stop server"<<endl;
     //getchar();
     //server.Stop();
     while(server.NumConn == 0)
@@ -48,7 +53,8 @@ int main(int argc, char **argv)
        printf("\n Error : Connect Failed \n");
        return 1;
     }
-
+    cout<<"press enter to connect to windows server"<<endl;
+    getchar();
     //Authenticate user
     std::string userName;
     std::string passwd;
@@ -61,15 +67,25 @@ int main(int argc, char **argv)
     //read response from server for authentication
     len = read(clientSockfd, buffer, MAX_LEN-1);
     buffer[len] = '\0';
-    if(strcpy(buffer, "success") != 0)
+    cout<<"received from windows: "<<buffer<<endl;
+    if(strcmp(buffer, "success") != 0)
     {
         cout<<"Authentication failed for user "<<userName<<endl;
+        close(clientSockfd);
+        server.Stop();
         exit(1);
     }
+    cout<<"Authentication successful for "<<userName<<endl;
 
     //send messages to server
-    while(getline(std::cin, authMsg))
+    while(true)
     {
+        cout<<userName<<" : ";
+        getline(std::cin, authMsg);
+        if(authMsg.length() == 0)
+        {
+            break;
+        }
         len = write(clientSockfd, authMsg.c_str(), authMsg.length());
     }
     close(clientSockfd);
