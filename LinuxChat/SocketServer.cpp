@@ -124,7 +124,7 @@ void *SocketServer::clientThread( void *ptr )
         {
             buffer[len] = '\0';
         }
-        cout<<"debug:: received from client----"<<buffer<<endl;
+        //cout<<"debug:: received from client----"<<buffer<<endl;
         switch(cur_state)
         {
             case CONNECTED:
