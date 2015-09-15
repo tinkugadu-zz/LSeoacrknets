@@ -101,8 +101,7 @@ DWORD WINAPI SocketServer::listeningThread( LPVOID lpParam )
 			else
 			{	
 				clientParam->server = server;
-				//start thread for lcient to continue
-				cout<<"accepted connection from client: "<<endl;
+				//start thread for client to continue				
 				DWORD dwordClientThr;
 				HANDLE clientThr = CreateThread(NULL, 0, clientThread, clientParam, 0, &dwordClientThr);
 				if(clientThr == NULL)
@@ -125,10 +124,19 @@ DWORD WINAPI SocketServer::listeningThread( LPVOID lpParam )
 
 DWORD WINAPI SocketServer::clientThread( LPVOID lpParam )
 {
+	//variables to store client Ipaddress and port;
+	char clientAddr[INET_ADDRSTRLEN];
+    int clientPort;
+    std::string clientName;
+    //get Ipaddress and port of client connected
+    
 	ClientThreadParam *clientParam = (ClientThreadParam *)lpParam;
-	ConnectionState cur_state = CONNECTED;
+	ConnectionState cur_state = STOP_CLIENT;
+	getIpAddressPort(&(clientParam->Addr), clientAddr, &clientPort);
+	cout<<"accepted connection from: "<<clientAddr<<" and port: "<<clientPort<<endl;
+	cur_state = CONNECTED;
 	char buffer[MAX_LEN];
-	std::string clientName;
+	
 	while(clientParam->server->IsRunning() && cur_state != STOP_CLIENT)
 	{
 		int bufLen = recv(clientParam->sockFd, buffer, MAX_LEN, 0);
@@ -149,7 +157,8 @@ DWORD WINAPI SocketServer::clientThread( LPVOID lpParam )
 				{
 					cur_state = COMMUNICATION;
 					cout<<"Authentication Successful for "<<clientName<<endl;
-					strcpy(buffer, "success");					
+					strcpy(buffer, "success");
+					cout<<clientName<<" is at IP address "<<clientAddr<<":"<<clientPort<<endl;
 				}
 				else
 				{
